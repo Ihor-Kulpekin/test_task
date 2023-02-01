@@ -8,16 +8,17 @@ import {
 
 import {UserService} from "../user/user.service";
 import {Inject, Injectable} from "@nestjs/common";
+import {TARGET_NAME} from "../shared/constants";
 
 @ValidatorConstraint({async: true})
 @Injectable()
 export class IsEmailNotRegistered implements ValidatorConstraintInterface {
     constructor(private readonly userService: UserService) {}
 
-    async validate(email: string): Promise<boolean> {
+    async validate(email: string, validationArguments?: ValidationArguments): Promise<boolean> {
         const user = await this.userService.getOne(email);
 
-        return !user;
+        return validationArguments && [TARGET_NAME.LOGIN_USER, TARGET_NAME.CHANGE_PASSWORD].includes(validationArguments.targetName) ? !!user : !user;
     }
 }
 

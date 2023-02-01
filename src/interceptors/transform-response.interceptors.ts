@@ -7,7 +7,6 @@ import {ExceptionResponseFilters} from "../exception-filters/exception-response.
 export class TransformResponseErrorsInterceptors implements NestInterceptor {
     async intercept(context: ExecutionContext, next: CallHandler): Promise<Observable<ServerResponseDto>> {
         return next.handle().pipe(
-            take(1),
             map((data) => ({
                 message: 'success',
                 requestObject: {

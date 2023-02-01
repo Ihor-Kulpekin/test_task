@@ -22,7 +22,6 @@ export class UserService {
     public async create(
         createUserDto: CreateUserDto,
     ): Promise<IUser> {
-        await this.userModel.deleteOne({email: createUserDto.email}).exec();
         createUserDto.password = await bcrypt.hash(createUserDto.password, saltOrRounds);
 
         return this.userModel.create(createUserDto);
