@@ -1,3 +1,8 @@
-import {LoginUserDto} from "./login-user-dto";
+import {IsNotEmpty, IsString, Length} from "class-validator";
 
-export class ChangePasswordDto extends LoginUserDto {}
+export class ChangePasswordDto {
+    @IsString()
+    @IsNotEmpty()
+    @Length(8, 64)
+    password: string
+}

@@ -6,6 +6,7 @@ import * as bcrypt from 'bcrypt';
 import {User} from "./user.schema";
 import {CreateUserDto} from "./dto/create-user.dto";
 import {IUser} from "./interfaces/user.interface";
+import {ChangePasswordDto} from "./dto/change-password.dto";
 
 const saltOrRounds = 10;
 
@@ -25,6 +26,15 @@ export class UserService {
         createUserDto.password = await bcrypt.hash(createUserDto.password, saltOrRounds);
 
         return this.userModel.create(createUserDto);
+    }
+
+    public async updatePassword(
+        user: IUser,
+        changePassword: ChangePasswordDto
+    ): Promise<any> {
+        changePassword.password = await bcrypt.hash(changePassword.password, saltOrRounds);
+        return this.userModel.updateOne({email: user.email},
+            {$set: {...changePassword}})
     }
 
     public async changePassword(email: string, password: string): Promise<any> {
